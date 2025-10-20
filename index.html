@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Amber 的時尚連結</title>
+  <meta name="description" content="高三學生 Amber 的個人連結頁 — 美妝｜時尚｜聯絡方式" />
+  <style>
+    /* ---------- 基本 reset & 字體 ---------- */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans TC', 'Helvetica Neue', Arial;
+      background: radial-gradient(1200px 600px at 10% 20%, rgba(255,200,230,0.12), transparent),
+                  radial-gradient(900px 400px at 90% 80%, rgba(200,230,255,0.08), transparent),
+                  linear-gradient(180deg,#fff7fb 0%, #fff 50%);
+      color:#222;
+      -webkit-font-smoothing:antialiased;
+      display:flex;align-items:center;justify-content:center;padding:32px;
+    }
+
+    /* ---------- 容器 ---------- */
+    .card{
+      width:100%;
+      max-width:520px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.95), rgba(250,250,255,0.9));
+      border-radius:18px;
+      box-shadow:0 8px 30px rgba(34,34,34,0.12);
+      padding:28px;
+      text-align:center;
+      position:relative;
+      overflow:hidden;
+      border:1px solid rgba(34,34,34,0.04);
+    }
+
+    /* 動態光暈（裝飾） */
+    .card::before{
+      content:"";
+      position:absolute;left:-20%;top:-40%;width:200%;height:140%;
+      background: conic-gradient(from 200deg at 50% 50%, rgba(255,215,230,0.25), rgba(220,240,255,0.18), rgba(255,245,220,0.12));
+      transform:rotate(12deg);
+      filter:blur(40px);
+      opacity:0.9;
+      pointer-events:none;
+    }
+
+    /* ---------- 頭像 & 名字 ---------- */
+    .avatar{
+      width:110px;height:110px;border-radius:50%;margin:0 auto 14px;position:relative;overflow:hidden;
+      display:flex;align-items:center;justify-content:center;border:4px solid rgba(255,255,255,0.85);
+      background:linear-gradient(135deg,#ffd6e8,#dbe8ff);
+      box-shadow:0 6px 18px rgba(34,34,34,0.08);
+    }
+    .avatar img{width:100%;height:100%;object-fit:cover;display:block}
+    h1{font-size:1.25rem;margin-bottom:6px}
+    p.subtitle{font-size:0.92rem;color:#555;margin-bottom:18px}
+
+    /* ---------- 連結按鈕 ---------- */
+    .links{display:flex;flex-direction:column;gap:12px;padding:6px}
+    .link{
+      display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;text-decoration:none;
+      background:linear-gradient(180deg,rgba(255,255,255,0.9),rgba(255,255,255,0.8));
+      border:1px solid rgba(34,34,34,0.06);color:#222;font-weight:600;box-shadow:0 2px 8px rgba(34,34,34,0.04);
+      transition:transform .22s ease, box-shadow .22s ease;
+    }
+    .link:active{transform:scale(.99)}
+    .link:hover{transform:translateY(-6px);box-shadow:0 12px 30px rgba(34,34,34,0.08)}
+
+    .link .icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.05rem}
+    .link .label{flex:1;text-align:left}
+    .link .arrow{opacity:0.7}
+
+    /* 顏色風格（可替換） */
+    .github .icon{background:linear-gradient(180deg,#111,#333);color:#fff}
+    .email .icon{background:linear-gradient(180deg,#ffd6e8,#ffb3d1)}
+    .linkedin .icon{background:linear-gradient(180deg,#dbe8ff,#b8d8ff)}
+    .instagram .icon{background:linear-gradient(45deg,#ffd6a5,#ff7ab6,#b28cff);color:#fff}
+
+    /* ---------- 小工具列 ---------- */
+    .tools{display:flex;gap:8px;justify-content:center;margin-top:16px}
+    .tool-btn{background:transparent;border:1px solid rgba(34,34,34,0.06);padding:8px 10px;border-radius:8px;font-size:0.85rem}
+
+    /* ---------- footer ---------- */
+    .legal{font-size:0.78rem;color:#666;margin-top:14px}
+
+    /* ---------- RWD ---------- */
+    @media (max-width:420px){
+      .card{padding:20px;border-radius:14px}
+      .avatar{width:92px;height:92px}
+      h1{font-size:1.05rem}
+      .link{padding:11px}
+    }
+
+    /* ---------- 輕量動畫（JS 控制） ---------- */
+    .pulse{
+      animation:pulse 2.6s ease-in-out infinite;
+    }
+    @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.02)}100%{transform:scale(1)}}
+  </style>
+</head>
+<body>
+  <main class="card" role="main">
+    <!-- 大頭貼（可直接放圖或留空放字母） -->
+    <div class="avatar" id="avatar">
+      <!-- 如果沒有圖片，預設顯示名字首字母 -->
+      <span id="avatar-fallback" style="font-weight:700;font-size:28px;color:#3a3a3a">A</span>
+      <!-- <img id="avatar-img" src="你的頭像網址.jpg" alt="Amber"> 可以放圖片，若使用圖片請把上面的 fallback 移除或隱藏 -->
+    </div>
+
+    <h1 id="name">Amber Yu</h1>
+    <p class="subtitle">高三 • 美妝 & 時尚愛好者 ✨</p>
+
+    <nav class="links" aria-label="連結選單">
+      <!-- 將 href 換成你的實際連結 -->
+      <a class="link github" href="https://github.com/你的GitHub帳號" target="_blank" rel="noopener noreferrer">
+        <div class="icon">💻</div>
+        <div class="label">GitHub</div>
+        <div class="arrow">›</div>
+      </a>
+
+      <a class="link email" href="mailto:你的Email@gmail.com" id="emailLink">
+        <div class="icon">📧</div>
+        <div class="label">Email • 點擊可複製</div>
+        <div class="arrow">✉</div>
+      </a>
+
+      <a class="link linkedin" href="https://www.linkedin.com/in/你的LinkedIn帳號" target="_blank" rel="noopener noreferrer">
+        <div class="icon">💼</div>
+        <div class="label">LinkedIn</div>
+        <div class="arrow">›</div>
+      </a>
+
+      <a class="link instagram" href="https://www.instagram.com/你的IG帳號" target="_blank" rel="noopener noreferrer">
+        <div class="icon">📸</div>
+        <div class="label">Instagram</div>
+        <div class="arrow">›</div>
+      </a>
+    </nav>
+
+    <div class="tools">
+      <button class="tool-btn" id="copyEmailBtn" aria-label="複製 Email">複製 Email</button>
+      <button class="tool-btn" id="themeBtn" aria-label="切換 亮/暗 模式">切換 風格</button>
+    </div>
+
+    <p class="legal">※ 請將上方連結替換為你的個人帳號或 email。</p>
+  </main>
+
+  <script>
+    // ========== 小功能：複製 email、切換風格、avatar fallback ===========
+    (function(){
+      const copyBtn = document.getElementById('copyEmailBtn');
+      const emailLink = document.getElementById('emailLink');
+      const themeBtn = document.getElementById('themeBtn');
+      const avatarImg = document.getElementById('avatar-img');
+      const avatarFallback = document.getElementById('avatar-fallback');
+      const card = document.querySelector('.card');
+
+      // 從 href 解析 email（當使用 mailto: 時）
+      function getEmail(){
+        const href = emailLink.getAttribute('href') || '';
+        if(href.startsWith('mailto:')) return href.replace('mailto:','');
+        return href;
+      }
+
+      copyBtn.addEventListener('click', async ()=>{
+        const text = getEmail() || 'yourEmail@example.com';
+        try{
+          await navigator.clipboard.writeText(text);
+          copyBtn.textContent = '已複製 ✓';
+          setTimeout(()=> copyBtn.textContent = '複製 Email',1400);
+        }catch(e){
+          // fallback
+          const input = document.createElement('input');
+          document.body.appendChild(input);
+          input.value = text;
+          input.select();
+          document.execCommand('copy');
+          document.body.removeChild(input);
+          copyBtn.textContent = '已複製 ✓';
+          setTimeout(()=> copyBtn.textContent = '複製 Email',1400);
+        }
+      });
+
+      // 切換簡單風格（亮 / 暗）
+      let dark = false;
+      themeBtn.addEventListener('click', ()=>{
+        dark = !dark;
+        if(dark){
+          document.body.style.background = 'linear-gradient(180deg,#0f1724,#071427)';
+          card.style.background = 'linear-gradient(180deg, rgba(12,18,28,0.9), rgba(8,12,20,0.88))';
+          card.style.color = '#fff';
+          Array.from(document.querySelectorAll('.link')).forEach(el=>el.style.background='linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))');
+        }else{
+          document.body.style.background = 'radial-gradient(1200px 600px at 10% 20%, rgba(255,200,230,0.12), transparent), radial-gradient(900px 400px at 90% 80%, rgba(200,230,255,0.08), transparent), linear-gradient(180deg,#fff7fb 0%, #fff 50%)';
+          card.style.background = '';
+          card.style.color = '#222';
+          Array.from(document.querySelectorAll('.link')).forEach(el=>el.style.background='');
+        }
+        // 小動畫反饋
+        themeBtn.classList.add('pulse');
+        setTimeout(()=> themeBtn.classList.remove('pulse'),600);
+      });
+
+      // 如果有上傳頭像 Img，隱藏 fallback
+      if(avatarImg && avatarImg.complete){
+        avatarFallback.style.display='none';
+      }
+
+      // Accessibility: enter 鍵觸發第一個連結
+      document.addEventListener('keydown', (e)=>{
+        if(e.key === 'Enter'){
+          const f = document.querySelector('.links .link');
+          if(f) f.click();
+        }
+      });
+
+      // 手機安全微互動：按住連結時增加陰影
+      Array.from(document.querySelectorAll('.link')).forEach(link=>{
+        link.addEventListener('touchstart', ()=> link.style.transform='translateY(-6px)');
+        link.addEventListener('touchend', ()=> link.style.transform='translateY(0)');
+      });
+
+    })();
+  </script>
+</body>
+</html>
